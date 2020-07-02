@@ -1,6 +1,6 @@
-FROM ruby:2.6-slim-buster
+FROM ruby:2.6-buster
 
-LABEL maintainer="ttksm <kris.dekeyser@libis.be>"
+LABEL maintainer="Kris Dekeyser <kris.dekeyser@libis.be>"
 
 RUN mkdir /app \
     && gem update --system \
