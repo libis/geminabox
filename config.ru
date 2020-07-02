@@ -3,9 +3,10 @@ require "geminabox"
 
 Geminabox.data = "/var/gems"
 
-@@user = ENV["GEMSERVER_USER"]
-@@pass = ENV["GEMSERVER_PASS"]
-@@apik = ENV["GEMSERVER_APIK"]
+$gems_user = ENV["GEMSERVER_USER"]
+$gems_pass = ENV["GEMSERVER_PASS"]
+$gems_apik = ENV["GEMSERVER_APIK"]
+$gems_open = ENV["GEMSERVER_OPEN"]
 
 Geminabox::Server.helpers do
   def protected!
@@ -17,12 +18,12 @@ Geminabox::Server.helpers do
 
   def authorized?
     @auth ||=  Rack::Auth::Basic::Request.new(request.env)
-    @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == [@@user, @@pass]
+    @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == [$gems_user, $gems_pass]
   end
 end
 
 Geminabox::Server.before '/index' do
-  protected!
+  protected! unless $gems_open
 end
 
 Geminabox::Server.before '/upload' do
@@ -30,7 +31,7 @@ Geminabox::Server.before '/upload' do
 end
 
 Geminabox::Server.before '/atom.xml' do
-  protected!
+  protected! unless $gems_open
 end
 
 Geminabox::Server.before '/reindex' do
@@ -38,7 +39,7 @@ Geminabox::Server.before '/reindex' do
 end
 
 Geminabox::Server.before '/gems' do
-  protected!
+  protected! unless $gems_open
 end
 
 Geminabox::Server.before do
@@ -46,7 +47,7 @@ Geminabox::Server.before do
 end
 
 Geminabox::Server.before '/api' do
-  unless env['HTTP_AUTHORIZATION'] == @@apik
+  unless env['HTTP_AUTHORIZATION'] == $gems_apik
     halt 401, "Access Denied. Api_key invalid or missing.\n"
   end
 end
