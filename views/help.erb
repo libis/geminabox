@@ -6,7 +6,7 @@
         <p>
           <code>gem sources -a <%= url.to_s.gsub('://','://username:password@') %></code>
         </p>
-        <% if allow_upload? %>
+        <% if Geminabox.allow_upload %>
           <small>and to upload gems:</small>
           <p>
             <code>gem install geminabox<br />gem inabox [gemfile]</code>
