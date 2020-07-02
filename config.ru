@@ -21,7 +21,23 @@ Geminabox::Server.helpers do
   end
 end
 
+Geminabox::Server.before '/index' do
+  protected!
+end
+
 Geminabox::Server.before '/upload' do
+  protected!
+end
+
+Geminabox::Server.before '/atom.xml' do
+  protected!
+end
+
+Geminabox::Server.before '/reindex' do
+  protected!
+end
+
+Geminabox::Server.before '/gems' do
   protected!
 end
 
@@ -29,7 +45,7 @@ Geminabox::Server.before do
   protected! if request.delete?
 end
 
-Geminabox::Server.before '/api/v1/gems' do
+Geminabox::Server.before '/api' do
   unless env['HTTP_AUTHORIZATION'] == @@apik
     halt 401, "Access Denied. Api_key invalid or missing.\n"
   end
