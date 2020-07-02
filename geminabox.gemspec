@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.files             = %w[MIT-LICENSE README.md] + Dir['{lib,public,views}/**/*']
   s.require_paths     = ['lib']
 
+  s.add_dependency('puma')
   s.add_dependency('sinatra', [">= 1.2.7"])
   s.add_dependency('builder')
   s.add_dependency('httpclient', [">= 2.2.7"])
