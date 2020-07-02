@@ -88,6 +88,10 @@ module Geminabox
     end
 
     get '/' do
+      erb :help
+    end
+    
+    get '/index' do
       @gems = load_gems
       @index_gems = index_gems(@gems)
       @allow_upload = self.class.allow_upload?
@@ -124,7 +128,7 @@ module Geminabox
         end
         force_rebuild = params[:force_rebuild] == 'true'
         self.class.reindex(force_rebuild)
-        redirect url("/")
+        redirect url("/index")
       end
     end
 
@@ -144,7 +148,7 @@ module Geminabox
       serialize_update do
         File.delete file_path if File.exist? file_path
         self.class.reindex(:force_rebuild)
-        redirect url("/")
+        redirect url("/index")
       end
 
     end
@@ -228,7 +232,7 @@ module Geminabox
       if redirect == false
         "Gem #{g.name} received and indexed."
       else
-        redirect url("/")
+        redirect url("/index")
       end
     end
 
