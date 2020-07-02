@@ -1,13 +1,21 @@
-FROM ruby:2.4.3
+FROM ruby:2.6-slim-buster
 
-RUN gem install bundler
+LABEL maintainer="ttksm <kris.dekeyser@libis.be>"
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+USER root
 
-COPY . /usr/src/app
+RUN mkdir /app \
+    && gem update --system \
+    && gem uninstall bundler \
+    && gem install bundler -v 2.1.4
+
+WORKDIR /app
+COPY Gemfile* config.ru ./
 RUN bundle install
+
+ENV GEMSERVER_USER="" \
+    GEMSERVER_PASS=""
 
 EXPOSE 9292
 
-ENTRYPOINT ["rackup", "--host", "0.0.0.0"]
+ENTRYPOINT ["puma"]
